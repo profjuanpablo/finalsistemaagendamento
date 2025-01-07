@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Cadastro de Serviço</title>
+</head>
+<body>
+    <h1>Cadastro de Serviço</h1>
+    <form th:action="@{/servicos/salvar}" th:object="${servico}" method="post">
+        <input type="hidden" th:field="*{id}"/>
+        <label>Descrição:</label>
+        <input type="text" th:field="*{descricao}" required/><br/>
+        <label>Linguagem:</label>
+        <input type="text" th:field="*{linguagem}" required/><br/>
+        <label>Status:</label>
+        <input type="text" th:field="*{status}" /><br/>
+        <label>Cliente:</label>
+        <select th:field="*{cliente.id}">
+            <option th:each="cliente : ${clientes}" th:value="${cliente.id}" th:text="${cliente.nome}"></option>
+        </select><br/>
+        <button type="submit">Salvar</button>
+        <a href="/servicos">Cancelar</a>
+    </form>
+</body>
+</html>
