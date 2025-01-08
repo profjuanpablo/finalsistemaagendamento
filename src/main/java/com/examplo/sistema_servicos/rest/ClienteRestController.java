@@ -1,24 +1,28 @@
 package com.examplo.sistema_servicos.rest;
 
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import com.examplo.sistema_servicos.model.Cliente;
+import com.examplo.sistema_servicos.model.Servico;
 import com.examplo.sistema_servicos.repository.ClienteRepository;
+import com.examplo.sistema_servicos.repository.ServicoRepository; // Importando o ServicoRepository
 
 import java.util.List;
 import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/clientes")
-@CrossOrigin(origins = "http://localhost:4200") // Permite chamadas de qualquer origem (útil para o Angular)
+@CrossOrigin(origins = "http://localhost:4200")
 public class ClienteRestController {
 
     @Autowired
     private ClienteRepository clienteRepository;
+
+    @Autowired
+    private ServicoRepository servicoRepository; // Injetando o ServicoRepository
 
     // Lista todos os clientes
     @GetMapping
@@ -32,6 +36,18 @@ public class ClienteRestController {
         Optional<Cliente> cliente = clienteRepository.findById(id);
         return cliente.map(ResponseEntity::ok)
                       .orElse(ResponseEntity.status(HttpStatus.NOT_FOUND).build());
+    }
+
+    // Lista todos os serviços de um cliente
+    @GetMapping("/{id}/servicos")
+    public ResponseEntity<List<Servico>> listarServicosDoCliente(@PathVariable Long id) {
+        Optional<Cliente> cliente = clienteRepository.findById(id);
+        if (cliente.isPresent()) {
+            List<Servico> servicos = servicoRepository.findByClienteId(id); // Agora servicoRepository está disponível
+            return ResponseEntity.ok(servicos);
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
     }
 
     // Adiciona um novo cliente
