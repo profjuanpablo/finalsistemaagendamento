@@ -15,7 +15,7 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/servicos")
-@CrossOrigin(origins = "*") // Permite chamadas de qualquer origem (útil para o Angular)
+@CrossOrigin(origins = "http://localhost:4200") // Permite chamadas de qualquer origem (útil para o Angular)
 public class ServicoRestController {
 
     @Autowired
